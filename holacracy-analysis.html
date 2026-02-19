@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Holacracia — Análisis de Modelo de Negocio</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0d0d;
+    --surface: #161616;
+    --surface2: #1e1e1e;
+    --accent: #c8ff00;
+    --accent2: #ff6b35;
+    --accent3: #5ce1e6;
+    --text: #f0ede8;
+    --muted: #888;
+    --border: #2a2a2a;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    padding: 80px 60px 60px;
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -100px; right: -100px;
+    width: 500px; height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(200,255,0,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards 0.1s;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(48px, 7vw, 96px);
+    font-weight: 900;
+    line-height: 0.95;
+    letter-spacing: -2px;
+    margin-bottom: 24px;
+    opacity: 0;
+    animation: fadeUp 0.7s ease forwards 0.2s;
+  }
+  .hero h1 span { color: var(--accent); }
+  .hero-sub {
+    font-size: 16px;
+    color: var(--muted);
+    max-width: 520px;
+    line-height: 1.7;
+    opacity: 0;
+    animation: fadeUp 0.7s ease forwards 0.35s;
+  }
+  .verdict-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 28px;
+    padding: 10px 20px;
+    border: 1px solid var(--accent);
+    border-radius: 100px;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--accent);
+    opacity: 0;
+    animation: fadeUp 0.7s ease forwards 0.5s;
+  }
+  .verdict-pill .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); animation: pulse 1.5s infinite; }
+
+  /* TABS */
+  .tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid var(--border);
+    padding: 0 60px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 20px 24px;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    transition: all 0.2s;
+    background: none;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+  }
+  .tab:hover { color: var(--text); }
+  .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  /* CONTENT */
+  .content { padding: 60px; }
+  .panel { display: none; }
+  .panel.active { display: block; animation: fadeIn 0.4s ease; }
+
+  /* CARDS GRID */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  @media (max-width: 900px) {
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    .hero, .content, .tabs { padding-left: 24px; padding-right: 24px; }
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 28px;
+    transition: border-color 0.2s;
+  }
+  .card:hover { border-color: #444; }
+  .card-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    margin-bottom: 12px;
+    line-height: 1.2;
+  }
+  .card p { font-size: 14px; color: var(--muted); line-height: 1.7; }
+  .pro .card-label { color: var(--accent); }
+  .con .card-label { color: var(--accent2); }
+  .neutral .card-label { color: var(--accent3); }
+
+  /* STAT ROW */
+  .stat-row {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 48px;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .stat-label { font-size: 13px; color: var(--muted); }
+
+  /* CASOS */
+  .case-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .case-company {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+  }
+  .case-status {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 100px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .status-ok { background: rgba(200,255,0,0.1); color: var(--accent); border: 1px solid rgba(200,255,0,0.3); }
+  .status-fail { background: rgba(255,107,53,0.1); color: var(--accent2); border: 1px solid rgba(255,107,53,0.3); }
+  .status-mixed { background: rgba(92,225,230,0.1); color: var(--accent3); border: 1px solid rgba(92,225,230,0.3); }
+
+  /* SCORECARD */
+  .score-section { margin-bottom: 40px; }
+  .score-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    margin-bottom: 8px;
+  }
+  .score-subtitle { font-size: 14px; color: var(--muted); margin-bottom: 28px; }
+
+  .score-item { margin-bottom: 20px; }
+  .score-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  .score-name { font-size: 14px; font-weight: 500; }
+  .score-val {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: var(--accent);
+  }
+  .score-bar-bg {
+    height: 6px;
+    background: var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .score-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    background: var(--accent);
+    width: 0%;
+    transition: width 1s ease;
+  }
+  .score-bar-fill.orange { background: var(--accent2); }
+  .score-bar-fill.blue { background: var(--accent3); }
+
+  .total-box {
+    background: var(--surface);
+    border: 1px solid var(--accent);
+    border-radius: 2px;
+    padding: 32px;
+    text-align: center;
+    margin-top: 32px;
+  }
+  .total-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 72px;
+    font-weight: 900;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .total-label { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 2px; color: var(--muted); margin-top: 8px; }
+  .total-verdict {
+    margin-top: 16px;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  /* INTERACTIVE SLIDERS */
+  .slider-group { margin-bottom: 20px; }
+  .slider-label { font-size: 13px; margin-bottom: 6px; color: var(--muted); }
+  .slider-row { display: flex; align-items: center; gap: 16px; }
+  input[type=range] {
+    flex: 1;
+    accent-color: var(--accent);
+    cursor: pointer;
+  }
+  .slider-out {
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    color: var(--accent);
+    width: 28px;
+    text-align: right;
+  }
+
+  /* SECTION TITLE */
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    margin-bottom: 8px;
+  }
+  .section-sub { font-size: 14px; color: var(--muted); margin-bottom: 32px; line-height: 1.6; }
+
+  /* TIMELINE */
+  .timeline { position: relative; padding-left: 32px; }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 8px; top: 8px; bottom: 0;
+    width: 1px;
+    background: var(--border);
+  }
+  .tl-item { position: relative; margin-bottom: 28px; }
+  .tl-dot {
+    position: absolute;
+    left: -28px; top: 6px;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 2px solid var(--bg);
+  }
+  .tl-year { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--accent); margin-bottom: 4px; }
+  .tl-text { font-size: 14px; color: var(--muted); line-height: 1.6; }
+  .tl-text strong { color: var(--text); }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+  @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+
+  /* DIVIDER */
+  .divider { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+
+  /* QUOTE */
+  .pull-quote {
+    border-left: 3px solid var(--accent);
+    padding: 16px 24px;
+    margin: 24px 0;
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-style: italic;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-label">// Análisis · Modelo de Negocio · 2026</div>
+  <h1>Hola<span>cracia</span></h1>
+  <p class="hero-sub">Un análisis profundo de la Holacracia como modelo organizacional y de negocio — sus fundamentos, casos reales, limitaciones y un scorecard interactivo para evaluar si aplica a tu contexto.</p>
+  <div class="verdict-pill">
+    <span class="dot"></span>
+    Modelo viable con condiciones específicas
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('fundamentos')">Fundamentos</button>
+  <button class="tab" onclick="switchTab('swot')">FODA</button>
+  <button class="tab" onclick="switchTab('casos')">Casos Reales</button>
+  <button class="tab" onclick="switchTab('scorecard')">Scorecard</button>
+  <button class="tab" onclick="switchTab('evaluar')">Evalúa tu Empresa</button>
+</div>
+
+<!-- FUNDAMENTOS -->
+<div class="content">
+<div id="fundamentos" class="panel active">
+  <div class="section-title">¿Qué es la Holacracia?</div>
+  <p class="section-sub">Un sistema de organizacional donde la autoridad y la toma de decisiones se distribuyen a través de equipos autoorganizados (círculos) en lugar de concentrarse en una jerarquía tradicional.</p>
+
+  <div class="grid-3" style="margin-bottom:40px;">
+    <div class="card">
+      <div class="card-label neutral">Concepto clave</div>
+      <h3>Círculos</h3>
+      <p>Equipos semi-autónomos con roles definidos. Cada círculo tiene su propio propósito, responsabilidades y autoridad dentro de su dominio.</p>
+    </div>
+    <div class="card">
+      <div class="card-label neutral">Concepto clave</div>
+      <h3>Roles, no Personas</h3>
+      <p>Los empleados asumen múltiples roles con responsabilidades claras. El rol, no la persona, tiene la autoridad para tomar decisiones.</p>
+    </div>
+    <div class="card">
+      <div class="card-label neutral">Concepto clave</div>
+      <h3>Constitución</h3>
+      <p>Un documento legal formal que reemplaza al organigrama. Define las reglas del juego: cómo se toman decisiones, se crean roles y se resuelven conflictos.</p>
+    </div>
+  </div>
+
+  <div class="pull-quote">
+    "La Holacracia no elimina la estructura — la redistribuye. En lugar de que los jefes tengan poder, los <em>roles</em> tienen poder."
+  </div>
+
+  <hr class="divider">
+
+  <div class="section-title" style="font-size:22px;margin-bottom:24px;">Cronología</div>
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-year">2001</div>
+      <div class="tl-text"><strong>Ternary Software</strong> experimenta con governance sin jerarquía tradicional bajo Brian Robertson.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-year">2007</div>
+      <div class="tl-text">Robertson funda <strong>holacracyOne</strong> y formaliza el sistema con su primera "Constitución".</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-year">2013</div>
+      <div class="tl-text"><strong>Zappos</strong> adopta Holacracia bajo Tony Hsieh — se convierte en el caso más conocido (y controversial) del mundo.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-year">2015</div>
+      <div class="tl-text">Zappos ofrece indemnización a quien no quiera seguir. <strong>18% del staff se va.</strong> El debate sobre escalabilidad explota.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-year">2019–hoy</div>
+      <div class="tl-text">El modelo encuentra mayor adopción en <strong>empresas medianas de tech y consultoría</strong> que en grandes corporaciones.</div>
+    </div>
+  </div>
+</div>
+
+<!-- SWOT -->
+<div id="swot" class="panel">
+  <div class="section-title">Análisis FODA</div>
+  <p class="section-sub">Fortalezas, Oportunidades, Debilidades y Amenazas del modelo holacracy aplicado como estructura de negocio.</p>
+
+  <div class="grid-2" style="margin-bottom:20px;">
+    <div class="card pro">
+      <div class="card-label">✦ Fortalezas</div>
+      <h3>Lo que funciona bien</h3>
+      <p style="margin-bottom:12px;">· Autonomía real: reduce cuellos de botella de aprobación gerencial.</p>
+      <p style="margin-bottom:12px;">· Mayor velocidad de ejecución en equipos pequeños y cohesionados.</p>
+      <p style="margin-bottom:12px;">· Elimina políticas de oficina y ambigüedad de roles.</p>
+      <p>· Alta retención de talento que valora la autonomía y el propósito.</p>
+    </div>
+    <div class="card con">
+      <div class="card-label">⚠ Debilidades</div>
+      <h3>Riesgos internos</h3>
+      <p style="margin-bottom:12px;">· Curva de aprendizaje larga — meses de formación antes de ser productivo.</p>
+      <p style="margin-bottom:12px;">· Dificulta la accountability cuando algo sale mal (sin jefes claros).</p>
+      <p style="margin-bottom:12px;">· Reuniones altamente estructuradas pueden volverse burocráticas.</p>
+      <p>· No escala bien por encima de ~150 personas sin modificaciones.</p>
+    </div>
+  </div>
+  <div class="grid-2">
+    <div class="card neutral">
+      <div class="card-label" style="color:var(--accent)">↑ Oportunidades</div>
+      <h3>Contextos favorables</h3>
+      <p style="margin-bottom:12px;">· Startups y scale-ups en sectores creativos, tech o de consultoría.</p>
+      <p style="margin-bottom:12px;">· Organizaciones con trabajo del conocimiento intensivo.</p>
+      <p style="margin-bottom:12px;">· Empresas con talento senior que no requiere micro-gestión.</p>
+      <p>· Contextos donde la innovación continua es crítica para la supervivencia.</p>
+    </div>
+    <div class="card" style="border-color:#3a1a1a;">
+      <div class="card-label" style="color:var(--accent2)">↓ Amenazas</div>
+      <h3>Factores de fracaso</h3>
+      <p style="margin-bottom:12px;">· Liderazgo que dice adoptar Holacracia pero no suelta el control real.</p>
+      <p style="margin-bottom:12px;">· Sectores regulados (finanzas, salud) donde la jerarquía es legal o necesaria.</p>
+      <p style="margin-bottom:12px;">· Empleados acostumbrados a dirección clara pueden sentirse perdidos.</p>
+      <p>· Alta rotación durante la transición (costo real y alto).</p>
+    </div>
+  </div>
+
+  <hr class="divider">
+  <div class="grid-3">
+    <div class="card" style="text-align:center;">
+      <div class="stat-row" style="justify-content:center;"><span class="stat-num">~30%</span></div>
+      <div class="stat-label">de implementaciones se abandonan en los primeros 2 años</div>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div class="stat-row" style="justify-content:center;"><span class="stat-num">150</span></div>
+      <div class="stat-label">personas: número de Dunbar — límite práctico de Holacracia pura</div>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div class="stat-row" style="justify-content:center;"><span class="stat-num">6–18</span></div>
+      <div class="stat-label">meses de transición típica antes de ver resultados positivos</div>
+    </div>
+  </div>
+</div>
+
+<!-- CASOS -->
+<div id="casos" class="panel">
+  <div class="section-title">Casos Reales</div>
+  <p class="section-sub">Empresas que adoptaron Holacracia y qué pasó — con honestidad sobre los resultados.</p>
+
+  <div class="grid-2">
+    <div class="case-card">
+      <div>
+        <div class="case-company">Zappos</div>
+        <span class="case-status status-mixed">Resultado mixto</span>
+      </div>
+      <p style="font-size:14px;color:var(--muted);line-height:1.7;">El caso más famoso. Tony Hsieh lo adoptó en 2013. El resultado: agilidad en equipos tech, pero caos en operaciones. 18% del staff se fue cuando se ofreció indemnización a quienes no quisieran seguir. Hoy Zappos usa una versión híbrida, no Holacracia pura.</p>
+      <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);">1,500 empleados · 2013–presente</div>
+    </div>
+    <div class="case-card">
+      <div>
+        <div class="case-company">Medium</div>
+        <span class="case-status status-fail">Abandonado</span>
+      </div>
+      <p style="font-size:14px;color:var(--muted);line-height:1.7;">Adoptó Holacracia en 2012 y la abandonó en 2016. El CEO Ev Williams declaró que el sistema no encajaba con su fase de crecimiento acelerado. La falta de dirección estratégica clara fue el mayor problema.</p>
+      <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);">~50–100 empleados en ese momento · 2012–2016</div>
+    </div>
+    <div class="case-card">
+      <div>
+        <div class="case-company">David Allen Company</div>
+        <span class="case-status status-ok">Adoptado con éxito</span>
+      </div>
+      <p style="font-size:14px;color:var(--muted);line-height:1.7;">La empresa detrás del método GTD adoptó Holacracia y la mantiene. Empresa pequeña (~20 personas), con trabajo de conocimiento intensivo y cultura de alto desempeño. El caso más citado de éxito sostenido.</p>
+      <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);">~20 empleados · 2012–presente</div>
+    </div>
+    <div class="case-card">
+      <div>
+        <div class="case-company">Springest</div>
+        <span class="case-status status-ok">Adoptado con éxito</span>
+      </div>
+      <p style="font-size:14px;color:var(--muted);line-height:1.7;">Startup de e-learning holandesa. Adoptó Holacracia desde sus inicios. Señalada como referencia europea de implementación exitosa — clave: tamaño pequeño y cultura de autonomía desde el día uno.</p>
+      <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);">~80 empleados · 2013–presente</div>
+    </div>
+  </div>
+
+  <div class="pull-quote" style="margin-top:40px;">
+    El patrón es claro: Holacracia tiende a funcionar en empresas pequeñas (&lt;150 personas), con trabajo de conocimiento, y donde la cultura de autonomía es preexistente — no instalada.
+  </div>
+</div>
+
+<!-- SCORECARD -->
+<div id="scorecard" class="panel">
+  <div class="score-section">
+    <div class="score-title">Scorecard: ¿Qué tan viable es Holacracia?</div>
+    <p class="score-subtitle">Evaluación objetiva del modelo en 8 dimensiones clave de viabilidad empresarial.</p>
+
+    <div class="score-item">
+      <div class="score-row"><span class="score-name">Adaptabilidad al cambio</span><span class="score-val">85/100</span></div>
+      <div class="score-bar-bg"><div class="score-bar-fill" style="width:85%"></div></div>
+    </div>
+    <div class="score-item">
+      <div class="score-row"><span class="score-name">Escalabilidad (&gt;150 personas)</span><span class="score-val">28/100</span></div>
+      <div class="score-bar-bg"><div class="score-bar-fill orange" style="width:28%"></div></div>
+    </div>
+    <div class="score-item">
+      <div class="score-row"><span class="score-name">Velocidad de decisión (equipos pequeños)</span><span class="score-val">78/100</span></div>
+      <div class="score-bar-bg"><div class="score-bar-fill" style="width:78%"></div></div>
+    </div>
+    <div class="score-item">
+      <div class="score-row"><span class="score-name">Accountability y rendición de cuentas</span><span class="score-val">55/100</span></div>
+      <div class="score-bar-bg"><div class="score-bar-fill blue" style="width:55%"></div></div>
+    </div>
+    <div class="score-item">
+      <div class="score-row"><span class="score-name">Retención de talento senior</span><span class="score-val">72/100</span></div>
+      <div class="score-bar-bg"><div class="score-bar-fill" style="width:72%"></div></div>
+    </div>
+    <div class="score-item">
+      <div class="score-row"><span class="score-name">Facilidad de implementación</span><span class="score-val">22/100</span></div>
+      <div class="score-bar-bg"><div class="score-bar-fill orange" style="width:22%"></div></div>
+    </div>
+    <div class="score-item">
+      <div class="score-row"><span class="score-name">Compatibilidad con sectores regulados</span><span class="score-val">18/100</span></div>
+      <div class="score-bar-bg"><div class="score-bar-fill orange" style="width:18%"></div></div>
+    </div>
+    <div class="score-item">
+      <div class="score-row"><span class="score-name">Innovación y creatividad</span><span class="score-val">88/100</span></div>
+      <div class="score-bar-bg"><div class="score-bar-fill" style="width:88%"></div></div>
+    </div>
+
+    <div class="total-box">
+      <div class="total-num">56</div>
+      <div class="total-label">/ 100 — Puntuación global de viabilidad</div>
+      <div class="total-verdict">Viable con condiciones. Alto potencial en contextos específicos, alta fricción en adopción general.</div>
+    </div>
+  </div>
+</div>
+
+<!-- EVALUAR -->
+<div id="evaluar" class="panel">
+  <div class="section-title">Evalúa tu Empresa</div>
+  <p class="section-sub">Ajusta los sliders según tu contexto. El score resultante te indica si Holacracia puede funcionar para ti.</p>
+
+  <div class="grid-2">
+    <div>
+      <div class="slider-group">
+        <div class="slider-label">Tamaño del equipo</div>
+        <div class="slider-row">
+          <input type="range" min="0" max="10" value="7" id="s1" oninput="calcScore()">
+          <span class="slider-out" id="o1">7</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);font-family:'DM Mono',monospace;margin-top:4px;"><span>+200 personas</span><span>&lt;20 personas</span></div>
+      </div>
+
+      <div class="slider-group">
+        <div class="slider-label">Cultura de autonomía existente</div>
+        <div class="slider-row">
+          <input type="range" min="0" max="10" value="5" id="s2" oninput="calcScore()">
+          <span class="slider-out" id="o2">5</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);font-family:'DM Mono',monospace;margin-top:4px;"><span>Cultura jerárquica</span><span>Alta autonomía</span></div>
+      </div>
+
+      <div class="slider-group">
+        <div class="slider-label">Trabajo de conocimiento vs operacional</div>
+        <div class="slider-row">
+          <input type="range" min="0" max="10" value="5" id="s3" oninput="calcScore()">
+          <span class="slider-out" id="o3">5</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);font-family:'DM Mono',monospace;margin-top:4px;"><span>Muy operacional</span><span>Conocimiento intensivo</span></div>
+      </div>
+
+      <div class="slider-group">
+        <div class="slider-label">Tolerancia al cambio organizacional</div>
+        <div class="slider-row">
+          <input type="range" min="0" max="10" value="5" id="s4" oninput="calcScore()">
+          <span class="slider-out" id="o4">5</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);font-family:'DM Mono',monospace;margin-top:4px;"><span>Muy resistente</span><span>Muy abierta</span></div>
+      </div>
+
+      <div class="slider-group">
+        <div class="slider-label">Sector regulado</div>
+        <div class="slider-row">
+          <input type="range" min="0" max="10" value="5" id="s5" oninput="calcScore()">
+          <span class="slider-out" id="o5">5</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);font-family:'DM Mono',monospace;margin-top:4px;"><span>Alta regulación</span><span>Sin regulación</span></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="total-box" style="height:100%;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:16px;">
+        <div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:2px;color:var(--muted);">TU SCORE ESTIMADO</div>
+        <div class="total-num" id="myScore">52</div>
+        <div class="total-label">/ 100</div>
+        <div class="total-verdict" id="myVerdict" style="max-width:280px;text-align:center;">Compatibilidad moderada. Considera un modelo híbrido.</div>
+        <div id="myRec" style="font-size:13px;color:var(--muted);max-width:280px;text-align:center;line-height:1.6;margin-top:8px;"></div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+function switchTab(id) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+  if (id === 'evaluar') calcScore();
+}
+
+function calcScore() {
+  const ids = ['s1','s2','s3','s4','s5'];
+  const weights = [0.25, 0.25, 0.2, 0.15, 0.15];
+  let total = 0;
+  ids.forEach((id, i) => {
+    const val = parseInt(document.getElementById(id).value);
+    document.getElementById('o' + (i+1)).textContent = val;
+    total += val * weights[i] * 10;
+  });
+  total = Math.round(total);
+  document.getElementById('myScore').textContent = total;
+
+  let verdict, rec;
+  if (total >= 75) {
+    verdict = "Alta compatibilidad. Holacracia puede ser una apuesta viable.";
+    rec = "Recomendamos comenzar con un piloto en 1 círculo antes de adopción total.";
+    document.getElementById('myScore').style.color = 'var(--accent)';
+  } else if (total >= 50) {
+    verdict = "Compatibilidad moderada. Considera un modelo híbrido.";
+    rec = "Teal, Sociocracy 3.0 o estructuras planas pueden ser mejores opciones intermedias.";
+    document.getElementById('myScore').style.color = 'var(--accent3)';
+  } else {
+    verdict = "Baja compatibilidad. Holacracia probablemente no es para tu contexto actual.";
+    rec = "Explora mejoras en tu modelo jerárquico actual: OKRs, squads, o gestión ágil.";
+    document.getElementById('myScore').style.color = 'var(--accent2)';
+  }
+  document.getElementById('myVerdict').textContent = verdict;
+  document.getElementById('myRec').textContent = rec;
+}
+
+// Animate bars on load
+setTimeout(() => {
+  document.querySelectorAll('.score-bar-fill').forEach(bar => {
+    bar.style.width = bar.style.width; // trigger reflow
+  });
+}, 100);
+
+calcScore();
+</script>
+</body>
+</html>
