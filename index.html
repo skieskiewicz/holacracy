@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Holacracia — Análisis de Modelo de Negocio</title>
+<title>Holocracia — Análisis de Modelo de Negocio</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -307,6 +307,124 @@
   .tl-text { font-size: 14px; color: var(--muted); line-height: 1.6; }
   .tl-text strong { color: var(--text); }
 
+  /* CHECKLIST */
+  .check-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+  }
+  .check-item:last-child { border-bottom: none; }
+  .check-box {
+    width: 22px; height: 22px;
+    border: 2px solid var(--border);
+    border-radius: 4px;
+    flex-shrink: 0;
+    margin-top: 2px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+    font-size: 13px;
+  }
+  .check-item.done .check-box {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #000;
+  }
+  .check-text { flex: 1; }
+  .check-title { font-size: 14px; font-weight: 500; margin-bottom: 4px; }
+  .check-desc { font-size: 12px; color: var(--muted); line-height: 1.6; }
+  .check-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 100px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    white-space: nowrap;
+    margin-top: 4px;
+  }
+  .progress-bar-wrap { margin-bottom: 32px; }
+  .progress-label { display: flex; justify-content: space-between; font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); margin-bottom: 8px; }
+  .progress-bg { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width 0.4s ease; }
+
+  /* ARTICULO CARDS */
+  .art-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .art-card:hover { border-color: #444; }
+  .art-header {
+    padding: 20px 24px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  .art-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    font-weight: 900;
+    color: var(--accent);
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .art-meta { flex: 1; }
+  .art-title { font-family: 'Playfair Display', serif; font-size: 18px; margin-bottom: 4px; }
+  .art-subtitle { font-size: 12px; color: var(--muted); }
+  .art-body { padding: 20px 24px; }
+  .art-body p { font-size: 13px; color: var(--muted); line-height: 1.7; margin-bottom: 12px; }
+  .art-body p:last-child { margin-bottom: 0; }
+  .key-concept {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(200,255,0,0.06);
+    border: 1px solid rgba(200,255,0,0.15);
+    border-radius: 4px;
+    padding: 6px 12px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    margin: 4px 4px 4px 0;
+  }
+  .role-badge {
+    display: inline-block;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 4px 10px;
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    color: var(--text);
+    margin: 2px;
+  }
+  .tension-box {
+    background: rgba(92,225,230,0.05);
+    border: 1px solid rgba(92,225,230,0.2);
+    border-radius: 4px;
+    padding: 12px 16px;
+    margin-top: 12px;
+    font-size: 12px;
+    color: var(--accent3);
+    line-height: 1.6;
+  }
+  .warn-box {
+    background: rgba(255,107,53,0.05);
+    border: 1px solid rgba(255,107,53,0.2);
+    border-radius: 4px;
+    padding: 12px 16px;
+    margin-top: 12px;
+    font-size: 12px;
+    color: var(--accent2);
+    line-height: 1.6;
+  }
+
   /* ANIMATIONS */
   @keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
   @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
@@ -333,7 +451,7 @@
 <div class="hero">
   <div class="hero-label">// Análisis · Modelo de Negocio · 2026</div>
   <h1>Hola<span>cracia</span></h1>
-  <p class="hero-sub">Un análisis profundo de la Holacracia como modelo organizacional y de negocio — sus fundamentos, casos reales, limitaciones y un scorecard interactivo para evaluar si aplica a tu contexto.</p>
+  <p class="hero-sub">Un análisis profundo de la Holocracia como modelo organizacional y de negocio — sus fundamentos, casos reales, limitaciones y un scorecard interactivo para evaluar si aplica a tu contexto.</p>
   <div class="verdict-pill">
     <span class="dot"></span>
     Modelo viable con condiciones específicas
@@ -346,13 +464,15 @@
   <button class="tab" onclick="switchTab('casos')">Casos Reales</button>
   <button class="tab" onclick="switchTab('scorecard')">Scorecard</button>
   <button class="tab" onclick="switchTab('evaluar')">Evalúa tu Empresa</button>
+  <button class="tab" onclick="switchTab('mecanica')">Mecánica Real</button>
+  <button class="tab" onclick="switchTab('checklist')">Checklist Adopción</button>
 </div>
 
 <!-- FUNDAMENTOS -->
 <div class="content">
 <div id="fundamentos" class="panel active">
-  <div class="section-title">¿Qué es la Holacracia?</div>
-  <p class="section-sub">Un sistema de organizacional donde la autoridad y la toma de decisiones se distribuyen a través de equipos autoorganizados (círculos) en lugar de concentrarse en una jerarquía tradicional.</p>
+  <div class="section-title">¿Qué es la Holocracia?</div>
+  <p class="section-sub">Un sistema de gobierno organizacional donde la autoridad y la toma de decisiones se distribuyen a través de equipos autoorganizados (círculos) en lugar de concentrarse en una jerarquía tradicional.</p>
 
   <div class="grid-3" style="margin-bottom:40px;">
     <div class="card">
@@ -373,7 +493,7 @@
   </div>
 
   <div class="pull-quote">
-    "La Holacracia no elimina la estructura — la redistribuye. En lugar de que los jefes tengan poder, los <em>roles</em> tienen poder."
+    "La Holocracia no elimina la estructura — la redistribuye. En lugar de que los jefes tengan poder, los <em>roles</em> tienen poder."
   </div>
 
   <hr class="divider">
@@ -388,12 +508,12 @@
     <div class="tl-item">
       <div class="tl-dot"></div>
       <div class="tl-year">2007</div>
-      <div class="tl-text">Robertson funda <strong>holacracyOne</strong> y formaliza el sistema con su primera "Constitución".</div>
+      <div class="tl-text">Robertson funda <strong>HolocracyOne</strong> y formaliza el sistema con su primera "Constitución".</div>
     </div>
     <div class="tl-item">
       <div class="tl-dot"></div>
       <div class="tl-year">2013</div>
-      <div class="tl-text"><strong>Zappos</strong> adopta Holacracia bajo Tony Hsieh — se convierte en el caso más conocido (y controversial) del mundo.</div>
+      <div class="tl-text"><strong>Zappos</strong> adopta Holocracia bajo Tony Hsieh — se convierte en el caso más conocido (y controversial) del mundo.</div>
     </div>
     <div class="tl-item">
       <div class="tl-dot"></div>
@@ -411,7 +531,7 @@
 <!-- SWOT -->
 <div id="swot" class="panel">
   <div class="section-title">Análisis FODA</div>
-  <p class="section-sub">Fortalezas, Oportunidades, Debilidades y Amenazas del modelo holacracy aplicado como estructura de negocio.</p>
+  <p class="section-sub">Fortalezas, Oportunidades, Debilidades y Amenazas del modelo Holocracy aplicado como estructura de negocio.</p>
 
   <div class="grid-2" style="margin-bottom:20px;">
     <div class="card pro">
@@ -443,7 +563,7 @@
     <div class="card" style="border-color:#3a1a1a;">
       <div class="card-label" style="color:var(--accent2)">↓ Amenazas</div>
       <h3>Factores de fracaso</h3>
-      <p style="margin-bottom:12px;">· Liderazgo que dice adoptar Holacracia pero no suelta el control real.</p>
+      <p style="margin-bottom:12px;">· Liderazgo que dice adoptar Holocracia pero no suelta el control real.</p>
       <p style="margin-bottom:12px;">· Sectores regulados (finanzas, salud) donde la jerarquía es legal o necesaria.</p>
       <p style="margin-bottom:12px;">· Empleados acostumbrados a dirección clara pueden sentirse perdidos.</p>
       <p>· Alta rotación durante la transición (costo real y alto).</p>
@@ -458,7 +578,7 @@
     </div>
     <div class="card" style="text-align:center;">
       <div class="stat-row" style="justify-content:center;"><span class="stat-num">150</span></div>
-      <div class="stat-label">personas: número de Dunbar — límite práctico de Holacracia pura</div>
+      <div class="stat-label">personas: número de Dunbar — límite práctico de Holocracia pura</div>
     </div>
     <div class="card" style="text-align:center;">
       <div class="stat-row" style="justify-content:center;"><span class="stat-num">6–18</span></div>
@@ -470,7 +590,7 @@
 <!-- CASOS -->
 <div id="casos" class="panel">
   <div class="section-title">Casos Reales</div>
-  <p class="section-sub">Empresas que adoptaron Holacracia y qué pasó — con honestidad sobre los resultados.</p>
+  <p class="section-sub">Empresas que adoptaron Holocracia y qué pasó — con honestidad sobre los resultados.</p>
 
   <div class="grid-2">
     <div class="case-card">
@@ -478,7 +598,7 @@
         <div class="case-company">Zappos</div>
         <span class="case-status status-mixed">Resultado mixto</span>
       </div>
-      <p style="font-size:14px;color:var(--muted);line-height:1.7;">El caso más famoso. Tony Hsieh lo adoptó en 2013. El resultado: agilidad en equipos tech, pero caos en operaciones. 18% del staff se fue cuando se ofreció indemnización a quienes no quisieran seguir. Hoy Zappos usa una versión híbrida, no Holacracia pura.</p>
+      <p style="font-size:14px;color:var(--muted);line-height:1.7;">El caso más famoso. Tony Hsieh lo adoptó en 2013. El resultado: agilidad en equipos tech, pero caos en operaciones. 18% del staff se fue cuando se ofreció indemnización a quienes no quisieran seguir. Hoy Zappos usa una versión híbrida, no Holocracia pura.</p>
       <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);">1,500 empleados · 2013–presente</div>
     </div>
     <div class="case-card">
@@ -486,7 +606,7 @@
         <div class="case-company">Medium</div>
         <span class="case-status status-fail">Abandonado</span>
       </div>
-      <p style="font-size:14px;color:var(--muted);line-height:1.7;">Adoptó Holacracia en 2012 y la abandonó en 2016. El CEO Ev Williams declaró que el sistema no encajaba con su fase de crecimiento acelerado. La falta de dirección estratégica clara fue el mayor problema.</p>
+      <p style="font-size:14px;color:var(--muted);line-height:1.7;">Adoptó Holocracia en 2012 y la abandonó en 2016. El CEO Ev Williams declaró que el sistema no encajaba con su fase de crecimiento acelerado. La falta de dirección estratégica clara fue el mayor problema.</p>
       <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);">~50–100 empleados en ese momento · 2012–2016</div>
     </div>
     <div class="case-card">
@@ -494,7 +614,7 @@
         <div class="case-company">David Allen Company</div>
         <span class="case-status status-ok">Adoptado con éxito</span>
       </div>
-      <p style="font-size:14px;color:var(--muted);line-height:1.7;">La empresa detrás del método GTD adoptó Holacracia y la mantiene. Empresa pequeña (~20 personas), con trabajo de conocimiento intensivo y cultura de alto desempeño. El caso más citado de éxito sostenido.</p>
+      <p style="font-size:14px;color:var(--muted);line-height:1.7;">La empresa detrás del método GTD adoptó Holocracia y la mantiene. Empresa pequeña (~20 personas), con trabajo de conocimiento intensivo y cultura de alto desempeño. El caso más citado de éxito sostenido.</p>
       <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);">~20 empleados · 2012–presente</div>
     </div>
     <div class="case-card">
@@ -502,20 +622,20 @@
         <div class="case-company">Springest</div>
         <span class="case-status status-ok">Adoptado con éxito</span>
       </div>
-      <p style="font-size:14px;color:var(--muted);line-height:1.7;">Startup de e-learning holandesa. Adoptó Holacracia desde sus inicios. Señalada como referencia europea de implementación exitosa — clave: tamaño pequeño y cultura de autonomía desde el día uno.</p>
+      <p style="font-size:14px;color:var(--muted);line-height:1.7;">Startup de e-learning holandesa. Adoptó Holocracia desde sus inicios. Señalada como referencia europea de implementación exitosa — clave: tamaño pequeño y cultura de autonomía desde el día uno.</p>
       <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);">~80 empleados · 2013–presente</div>
     </div>
   </div>
 
   <div class="pull-quote" style="margin-top:40px;">
-    El patrón es claro: Holacracia tiende a funcionar en empresas pequeñas (&lt;150 personas), con trabajo de conocimiento, y donde la cultura de autonomía es preexistente — no instalada.
+    El patrón es claro: Holocracia tiende a funcionar en empresas pequeñas (&lt;150 personas), con trabajo de conocimiento, y donde la cultura de autonomía es preexistente — no instalada.
   </div>
 </div>
 
 <!-- SCORECARD -->
 <div id="scorecard" class="panel">
   <div class="score-section">
-    <div class="score-title">Scorecard: ¿Qué tan viable es Holacracia?</div>
+    <div class="score-title">Scorecard: ¿Qué tan viable es Holocracia?</div>
     <p class="score-subtitle">Evaluación objetiva del modelo en 8 dimensiones clave de viabilidad empresarial.</p>
 
     <div class="score-item">
@@ -562,7 +682,7 @@
 <!-- EVALUAR -->
 <div id="evaluar" class="panel">
   <div class="section-title">Evalúa tu Empresa</div>
-  <p class="section-sub">Ajusta los sliders según tu contexto. El score resultante te indica si Holacracia puede funcionar para ti.</p>
+  <p class="section-sub">Ajusta los sliders según tu contexto. El score resultante te indica si Holocracia puede funcionar para ti.</p>
 
   <div class="grid-2">
     <div>
@@ -623,6 +743,330 @@
     </div>
   </div>
 </div>
+
+<!-- MECÁNICA REAL -->
+<div id="mecanica" class="panel">
+  <div class="section-title">Mecánica Real: Los 5 Artículos</div>
+  <p class="section-sub">Basado en la Constitución Holocracia v4.1 (repositorio oficial de HolacracyOne). Esto es lo que el sistema realmente dice — no la versión marketineada.</p>
+
+  <div style="display:flex;flex-direction:column;gap:20px;">
+
+    <div class="art-card">
+      <div class="art-header">
+        <div class="art-num">I</div>
+        <div class="art-meta">
+          <div class="art-title">Energizando Roles</div>
+          <div class="art-subtitle">El bloque fundamental de toda la estructura</div>
+        </div>
+      </div>
+      <div class="art-body">
+        <p>Un <strong>Rol</strong> no es una descripción de puesto. Tiene cuatro componentes exactos: un <em>nombre</em>, un <em>propósito</em> (para qué existe), <em>dominios</em> (qué controla) y <em>responsabilidades</em> (actividades recurrentes). Una persona puede llenar múltiples roles simultáneamente.</p>
+        <p>Cuando llenar un rol, tienes 5 deberes obligatorios según la Constitución:</p>
+        <div>
+          <span class="key-concept">① Procesar tensiones</span>
+          <span class="key-concept">② Definir proyectos</span>
+          <span class="key-concept">③ Desglosar en acciones</span>
+          <span class="key-concept">④ Registrar todo por escrito</span>
+          <span class="key-concept">⑤ Ejecutar próximas acciones</span>
+        </div>
+        <div class="tension-box">
+          💡 Concepto clave — <strong>Tensión:</strong> La brecha entre cómo están las cosas y su potencial ideal. Todo el sistema gira alrededor de procesar tensiones como motor de mejora continua.
+        </div>
+        <div class="warn-box">
+          ⚠️ Implicación de negocio: Los contratos laborales y descripciones de puesto tradicionales son incompatibles con este artículo. Requiere reescribir toda la arquitectura de RRHH.
+        </div>
+      </div>
+    </div>
+
+    <div class="art-card">
+      <div class="art-header">
+        <div class="art-num">II</div>
+        <div class="art-meta">
+          <div class="art-title">Estructura de Círculos</div>
+          <div class="art-subtitle">Cómo se organiza y anida la autoridad</div>
+        </div>
+      </div>
+      <div class="art-body">
+        <p>Un <strong>Círculo</strong> es un rol que se descompone en más roles. Tiene su propio propósito, dominios y responsabilidades. Cada círculo puede crear sub-círculos, formando una jerarquía anidada (holárquica, no jerárquica en el sentido tradicional).</p>
+        <p>Cada círculo tiene 4 roles electos obligatorios:</p>
+        <div style="margin-bottom:12px;">
+          <span class="role-badge">Lead Link → Asigna roles y prioridades</span>
+          <span class="role-badge">Rep Link → Representa al círculo hacia arriba</span>
+          <span class="role-badge">Facilitador → Conduce reuniones de gobierno</span>
+          <span class="role-badge">Secretario → Captura acuerdos y gobernanza</span>
+        </div>
+        <p>El <strong>Lead Link</strong> no es un jefe — no puede decirle a las personas qué hacer. Solo puede asignar roles y establecer prioridades dentro de los dominios del círculo.</p>
+        <div class="tension-box">
+          💡 El <strong>Anchor Circle</strong> (Círculo Ancla) es el más amplio — contiene todos los demás y define el propósito de la organización completa. Es el equivalente al "board" en una estructura tradicional.
+        </div>
+        <div class="warn-box">
+          ⚠️ Implicación de negocio: El CEO pierde autoridad directiva. Pasa a ser Lead Link del Anchor Circle — un rol con responsabilidades muy acotadas constitucionalmente.
+        </div>
+      </div>
+    </div>
+
+    <div class="art-card">
+      <div class="art-header">
+        <div class="art-num">III</div>
+        <div class="art-meta">
+          <div class="art-title">Proceso de Gobernanza</div>
+          <div class="art-subtitle">Cómo se toman decisiones estructurales — el corazón burocrático</div>
+        </div>
+      </div>
+      <div class="art-body">
+        <p>Cualquier cambio de roles, dominios o políticas debe pasar por el <strong>Proceso de Gobernanza</strong> del círculo correspondiente. No se puede cambiar nada fuera de este proceso — ni el CEO.</p>
+        <p>El proceso de toma de decisiones es <strong>integrativo</strong>, no por consenso ni por mayoría. Una propuesta pasa si nadie puede probar que causa daño — las objeciones deben ser válidas según criterios específicos de la Constitución.</p>
+        <div>
+          <span class="key-concept">Propuesta → Ronda de aclaración → Ronda de reacción → Objeciones → Integración</span>
+        </div>
+        <div class="tension-box">
+          💡 La diferencia entre Holocracia y democracia organizacional: no se vota, no se necesita consenso. Una propuesta avanza a menos que alguien tenga una objeción <em>constitucionalmente válida</em>.
+        </div>
+        <div class="warn-box">
+          ⚠️ Implicación de negocio: Las reuniones de gobernanza son altamente estructuradas y pueden volverse el mayor cuello de botella operativo si el equipo no está bien entrenado. Requiere un Facilitador experto.
+        </div>
+      </div>
+    </div>
+
+    <div class="art-card">
+      <div class="art-header">
+        <div class="art-num">IV</div>
+        <div class="art-meta">
+          <div class="art-title">Proceso Operacional</div>
+          <div class="art-subtitle">El día a día: cómo se trabaja dentro de los roles</div>
+        </div>
+      </div>
+      <div class="art-body">
+        <p>En contraste con el proceso de gobernanza (colectivo), el proceso operacional da <strong>amplia autonomía individual</strong>. Cada persona con un rol tiene autoridad para tomar cualquier acción que sirva el propósito de ese rol, salvo que esté restringida por una política.</p>
+        <p>Las <strong>Reuniones Tácticas</strong> (generalmente semanales) siguen un formato estricto:</p>
+        <div>
+          <span class="key-concept">Check-in</span>
+          <span class="key-concept">Tablero de métricas</span>
+          <span class="key-concept">Revisión de checklist</span>
+          <span class="key-concept">Actualizaciones de proyectos</span>
+          <span class="key-concept">Triage de tensiones</span>
+          <span class="key-concept">Check-out</span>
+        </div>
+        <p style="margin-top:12px;">El "triage" es el momento más importante: cada tensión se convierte en una acción concreta o un proyecto. No se permite divagar.</p>
+        <div class="tension-box">
+          💡 <strong>Iniciativa Individual:</strong> La Constitución permite actuar fuera de tu rol o romper reglas si: sirves el propósito de algún rol, crees que resuelves más tensión de la que creas, y no comprometes recursos sin autorización.
+        </div>
+      </div>
+    </div>
+
+    <div class="art-card">
+      <div class="art-header">
+        <div class="art-num">V</div>
+        <div class="art-meta">
+          <div class="art-title">Asuntos de Adopción</div>
+          <div class="art-subtitle">La transición legal y operativa — lo más subestimado</div>
+        </div>
+      </div>
+      <div class="art-body">
+        <p>Este artículo cubre la <strong>transición desde una estructura pre-holocrática</strong>. La Constitución debe ser referenciada por un documento de adopción formal — puede ser una resolución del directorio, una política del CEO, o estatutos corporativos.</p>
+        <p>Puntos críticos de adopción según la Constitución:</p>
+        <div style="margin-bottom:12px;">
+          <span class="key-concept">✓ Declaración formal de adopción</span>
+          <span class="key-concept">✓ Definición del Anchor Circle</span>
+          <span class="key-concept">✓ Asignación del Lead Link inicial</span>
+          <span class="key-concept">✓ Ratificación por el board</span>
+        </div>
+        <p>La Constitución también provee reglas para cuando se adopta Holocracia dentro de una estructura de directorio con representantes — útil para empresas con inversionistas que necesitan mantener governance corporativo tradicional en paralelo.</p>
+        <div class="warn-box">
+          ⚠️ El error más común: adoptar "el espíritu" de Holocracia sin adoptar la Constitución formalmente. Sin el documento legal, la estructura colapsa ante el primer conflicto serio porque no hay reglas vinculantes.
+        </div>
+        <div class="tension-box">
+          💡 La Constitución está licenciada bajo <strong>CC BY-SA 4.0</strong> — es de uso libre. No necesitas contratar a HolacracyOne para adoptarla, aunque su consultoría acelera el proceso.
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- CHECKLIST ADOPCIÓN -->
+<div id="checklist" class="panel">
+  <div class="section-title">Checklist de Adopción</div>
+  <p class="section-sub">Basado en el Artículo V de la Constitución oficial v4.1 y mejores prácticas documentadas. Marca cada ítem para rastrear tu progreso.</p>
+
+  <div class="progress-bar-wrap">
+    <div class="progress-label">
+      <span>Progreso de adopción</span>
+      <span id="checkCount">0 / 18 completados</span>
+    </div>
+    <div class="progress-bg">
+      <div class="progress-fill" id="progressFill" style="width:0%"></div>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:40px;">
+    <div>
+      <div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:2px;color:var(--accent);margin-bottom:16px;">FASE 1 — FUNDACIÓN LEGAL</div>
+
+      <div class="check-item" onclick="toggleCheck(this)">
+        <div class="check-box">✓</div>
+        <div class="check-text">
+          <div class="check-title">Declaración formal de adopción</div>
+          <div class="check-desc">Resolución de directorio o política del CEO que hace referencia explícita a la Constitución v4.1. Sin esto, la Holocracia no tiene fuerza legal.</div>
+          <div class="check-tag">Artículo V · Crítico</div>
+        </div>
+      </div>
+
+      <div class="check-item" onclick="toggleCheck(this)">
+        <div class="check-box">✓</div>
+        <div class="check-text">
+          <div class="check-title">Definición del Anchor Circle</div>
+          <div class="check-desc">El círculo más amplio que contiene todos los demás. Debe tener propósito, dominios y responsabilidades explícitamente definidos.</div>
+          <div class="check-tag">Artículo II · Crítico</div>
+        </div>
+      </div>
+
+      <div class="check-item" onclick="toggleCheck(this)">
+        <div class="check-box">✓</div>
+        <div class="check-text">
+          <div class="check-title">Asignación del Lead Link del Anchor Circle</div>
+          <div class="check-desc">Típicamente el CEO o fundador. Esta persona tiene autoridad de transición hasta que el proceso de gobernanza tome el control.</div>
+          <div class="check-tag">Artículo V · Crítico</div>
+        </div>
+      </div>
+
+      <div class="check-item" onclick="toggleCheck(this)">
+        <div class="check-box">✓</div>
+        <div class="check-text">
+          <div class="check-title">Revisión de compatibilidad con estatutos corporativos</div>
+          <div class="check-desc">Asegurarse de que la adopción no contradice obligaciones legales existentes (especialmente en sectores regulados).</div>
+          <div class="check-tag">Legal · Crítico</div>
+        </div>
+      </div>
+
+      <div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:2px;color:var(--accent);margin:24px 0 16px;">FASE 2 — FORMACIÓN</div>
+
+      <div class="check-item" onclick="toggleCheck(this)">
+        <div class="check-box">✓</div>
+        <div class="check-text">
+          <div class="check-title">Lectura completa de la Constitución por líderes clave</div>
+          <div class="check-desc">Al menos el CEO y los futuros Lead Links deben leer los 5 artículos completos. El repositorio español está en GitHub (holacracyone).</div>
+          <div class="check-tag">Formación · Alto</div>
+        </div>
+      </div>
+
+      <div class="check-item" onclick="toggleCheck(this)">
+        <div class="check-box">✓</div>
+        <div class="check-text">
+          <div class="check-title">Entrenamiento en Proceso de Gobernanza</div>
+          <div class="check-desc">Todo el equipo debe comprender el proceso integrativo de decisiones: propuesta → aclaración → reacción → objeciones → integración.</div>
+          <div class="check-tag">Formación · Alto</div>
+        </div>
+      </div>
+
+      <div class="check-item" onclick="toggleCheck(this)">
+        <div class="check-box">✓</div>
+        <div class="check-text">
+          <div class="check-title">Designación y formación del Facilitador</div>
+          <div class="check-desc">El Facilitador es el rol más crítico en implementaciones tempranas. Requiere entrenamiento específico y mucha práctica.</div>
+          <div class="check-tag">Roles · Alto</div>
+        </div>
+      </div>
+
+      <div class="check-item" onclick="toggleCheck(this)">
+        <div class="check-box">✓</div>
+        <div class="check-text">
+          <div class="check-title">Entrenamiento en el concepto de "Tensión"</div>
+          <div class="check-desc">Todo el equipo debe saber identificar y articular tensiones claramente. Es el motor del sistema; sin esto, las reuniones no funcionan.</div>
+          <div class="check-tag">Formación · Medio</div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:2px;color:var(--accent);margin-bottom:16px;">FASE 3 — DISEÑO INICIAL</div>
+
+      <div class="check-item" onclick="toggleCheck(this)">
+        <div class="check-box">✓</div>
+        <div class="check-text">
+          <div class="check-title">Mapeo de roles existentes a formato Holocracia</div>
+          <div class="check-desc">Convertir puestos de trabajo actuales en roles con propósito, dominios y responsabilidades específicas. Espera entre 2–4 semanas de trabajo.</div>
+          <div class="check-tag">Diseño · Alto</div>
+        </div>
+      </div>
+
+      <div class="check-item" onclick="toggleCheck(this)">
+        <div class="check-box">✓</div>
+        <div class="check-text">
+          <div class="check-title">Definición de círculos iniciales</div>
+          <div class="check-desc">Diseñar la estructura inicial de círculos. Recomendado: empezar simple y dejar que el proceso de gobernanza refine con el tiempo.</div>
+          <div class="check-tag">Diseño · Alto</div>
+        </div>
+      </div>
+
+      <div class="check-item" onclick="toggleCheck(this)">
+        <div class="check-box">✓</div>
+        <div class="check-text">
+          <div class="check-title">Elección de Facilitadores y Secretarios por círculo</div>
+          <div class="check-desc">Siguiendo el proceso electoral integrativo del Artículo III. No se nombran — se eligen por el proceso de la Constitución.</div>
+          <div class="check-tag">Proceso · Alto</div>
+        </div>
+      </div>
+
+      <div class="check-item" onclick="toggleCheck(this)">
+        <div class="check-box">✓</div>
+        <div class="check-text">
+          <div class="check-title">Herramienta de gestión de gobernanza configurada</div>
+          <div class="check-desc">GlassFrog (oficial) o alternativas como Holaspirit o Fibery. Sin software, el sistema colapsa por falta de visibilidad.</div>
+          <div class="check-tag">Herramientas · Medio</div>
+        </div>
+      </div>
+
+      <div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:2px;color:var(--accent);margin:24px 0 16px;">FASE 4 — OPERACIÓN Y CONSOLIDACIÓN</div>
+
+      <div class="check-item" onclick="toggleCheck(this)">
+        <div class="check-box">✓</div>
+        <div class="check-text">
+          <div class="check-title">Primera Reunión de Gobernanza formal</div>
+          <div class="check-desc">Con Facilitador entrenado, siguiendo el proceso exacto de la Constitución. Documenta todo en el software elegido.</div>
+          <div class="check-tag">Operación · Crítico</div>
+        </div>
+      </div>
+
+      <div class="check-item" onclick="toggleCheck(this)">
+        <div class="check-box">✓</div>
+        <div class="check-text">
+          <div class="check-title">Cadencia semanal de Reuniones Tácticas establecida</div>
+          <div class="check-desc">Formato estricto del Artículo IV: check-in, métricas, checklist, proyectos, triage. Máximo 60–90 minutos.</div>
+          <div class="check-tag">Operación · Alto</div>
+        </div>
+      </div>
+
+      <div class="check-item" onclick="toggleCheck(this)">
+        <div class="check-box">✓</div>
+        <div class="check-text">
+          <div class="check-title">Protocolo de Iniciativa Individual documentado</div>
+          <div class="check-desc">El equipo debe saber cuándo puede actuar fuera de su rol (Art. IV) y cuál es el proceso de notificación requerido.</div>
+          <div class="check-tag">Operación · Medio</div>
+        </div>
+      </div>
+
+      <div class="check-item" onclick="toggleCheck(this)">
+        <div class="check-box">✓</div>
+        <div class="check-text">
+          <div class="check-title">Revisión de adopción a los 90 días</div>
+          <div class="check-desc">Evaluar si el sistema está funcionando como se diseñó. Identificar tensiones sistémicas y procesar a través de gobernanza, no fuera de ella.</div>
+          <div class="check-tag">Revisión · Medio</div>
+        </div>
+      </div>
+
+      <div class="check-item" onclick="toggleCheck(this)">
+        <div class="check-box">✓</div>
+        <div class="check-text">
+          <div class="check-title">Comunicación formal a todo el equipo</div>
+          <div class="check-desc">Documento claro que explica el cambio, el porqué, el cronograma y qué significa para cada persona en términos prácticos.</div>
+          <div class="check-tag">Cultura · Alto</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 </div>
 
 <script>
@@ -648,7 +1092,7 @@ function calcScore() {
 
   let verdict, rec;
   if (total >= 75) {
-    verdict = "Alta compatibilidad. Holacracia puede ser una apuesta viable.";
+    verdict = "Alta compatibilidad. Holocracia puede ser una apuesta viable.";
     rec = "Recomendamos comenzar con un piloto en 1 círculo antes de adopción total.";
     document.getElementById('myScore').style.color = 'var(--accent)';
   } else if (total >= 50) {
@@ -656,7 +1100,7 @@ function calcScore() {
     rec = "Teal, Sociocracy 3.0 o estructuras planas pueden ser mejores opciones intermedias.";
     document.getElementById('myScore').style.color = 'var(--accent3)';
   } else {
-    verdict = "Baja compatibilidad. Holacracia probablemente no es para tu contexto actual.";
+    verdict = "Baja compatibilidad. Holocracia probablemente no es para tu contexto actual.";
     rec = "Explora mejoras en tu modelo jerárquico actual: OKRs, squads, o gestión ágil.";
     document.getElementById('myScore').style.color = 'var(--accent2)';
   }
@@ -664,7 +1108,20 @@ function calcScore() {
   document.getElementById('myRec').textContent = rec;
 }
 
-// Animate bars on load
+function toggleCheck(el) {
+  el.classList.toggle('done');
+  updateProgress();
+}
+
+function updateProgress() {
+  const items = document.querySelectorAll('.check-item');
+  const done = document.querySelectorAll('.check-item.done').length;
+  const pct = Math.round((done / items.length) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('checkCount').textContent = done + ' / ' + items.length + ' completados';
+}
+
+
 setTimeout(() => {
   document.querySelectorAll('.score-bar-fill').forEach(bar => {
     bar.style.width = bar.style.width; // trigger reflow
